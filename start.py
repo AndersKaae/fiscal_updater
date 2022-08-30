@@ -4,6 +4,7 @@ import sys
 from datetime import date, timedelta, datetime
 from database import Get_Rebuild_Date, Save_Json_To_DB, Store_Progress
 from scanscroll import ProcessDay
+from time import sleep
 
 def Get_JSON_Date(page, date, pagesize): # Retrieves companys where last updated on date
     headers = {'Content-Type': 'application/json',}
@@ -26,7 +27,7 @@ def Process_JSON(json_data):
 
 def GetStartingDate():
     cmd_arg = ""
-    end_date = date.today() - timedelta(days=365*40)
+    end_date = date.today() - timedelta(days=3)
     if len(sys.argv) > 1:
         cmd_arg = sys.argv[1]
     if cmd_arg == '-c':
@@ -35,6 +36,7 @@ def GetStartingDate():
     elif cmd_arg == '-n':
         date_to_process = date.today()
         print('Starting a fresh rebuild...')
+        end_date = date.today() - timedelta(days=365*40)
     else:
         date_to_process = date.today()
         end_date = date.today() - timedelta(days=3)
@@ -59,4 +61,9 @@ def Main():
         if  date_to_process < end_date:
             break
 
-Main()
+if __name__ == '__main__':
+    loop = True
+    while loop == True: 
+        Main()
+        print(f"Restarting loop 6000 seconds...")
+        sleep(6000)  
